@@ -41,24 +41,25 @@ function newGame(){
 
     players = set.getPlayers(); 
 
-    // let turns = set.geTurns();
+    let turns = set.geTurns();
     const {t1, t2} = turns;
 
+    let turnCount = 0;
     let roundCount = 0;
 
-    let turnCount = 0;
     let yourTurn;
-    const geTount = () => turnCount;
+    // const geTount = () => turnCount;
     
-    // function resetRound(){
-    // turnCount = 1;
-    // board = [
-    //     [2, 3, 4], 
-    //     [5, 6, 7], 
-    //     [8, 9, 2]
-    // ];
-    // roundCount++;
-    // }
+    function resetRound(){
+    turnCount = 0;
+    board = [
+        [2, 3, 4], 
+        [5, 6, 7], 
+        [8, 9, 2]
+    ];
+    roundCount++;
+    return roundCount;
+    };
 
     function marking(x, y){
         turnCount += 1;
@@ -66,28 +67,25 @@ function newGame(){
         board[x].splice(y, 1, yourTurn);
         if(turnCount >= 5){return check()};
         return {board, turnCount};
-    }
+    };
     
-
     function check(){
         console.log(`checking`);
         for(let i = 0 ; i < 2; i++){
-            if(board[i].every((e) => e === board[i][e])){
-                return board[i][0] === players[0].mark ? players[0].won(): players[1].won();
-                // resetRound();
+            if(board[i].every((e) => e === board[i][1])){
+                return board[i][0] === players[0].mark ? players[0].won(): players[1].won(), resetRound();
             }
             else if(board[0][i] === board[1][i] && board[1][i] === board[2][i]){
-               return board[0][i] === players[0].mark ? players[0].won() : players[1].won();
-            //    resetRound()
+               return board[0][i] === players[0].mark ? players[0].won() : players[1].won(), resetRound(); 
             }
         }if((board[1][1] == board[0][0] && board[1][1] == board[2][2]) || 
             (board[1][1] == board[0][2] && board[1][1] == board[2][0])){
-                return board[1][1] === players[1].mark ? players[1].won() : players[0].won();
-            // resetRound();
+                return board[1][1] === players[1].mark ? players[1].won() : players[0].won(), resetRound();
         }
-        // else if(turnCount == 9){return resetRound()}
-    }return {marking, board, players, turns};
-
+        else if(turnCount == 9){return resetRound()}
+        else{return {board, turnCount}}
+    }
+    return {marking, resetRound, board, players, turns};
     
     // let winArchive = [];
     // winArchive.push(players[0].symbol)

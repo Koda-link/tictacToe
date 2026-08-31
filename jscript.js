@@ -8,7 +8,7 @@ function setGame(name1, name2, whoMark){
     function newPlayer(name){
         let mark = 2;
         let wins = 0;
-        const won = () => {wins++;};
+        const won = () => {wins++; };
         const getWin = () => wins;
         return {name, mark, getWin, won}
     };
@@ -73,29 +73,38 @@ function newGame(){
         console.log(`checking`);
         for(let i = 0 ; i < 2; i++){
             if(board[i].every((e) => e === board[i][1])){
-                return board[i][0] === players[0].mark ? players[0].won(): players[1].won(), resetRound();
+            return board[i][0] === players[0].mark ? (players[0].won(), congrats(players[0].mark)) : (players[1].won(), congrats(players[1].mark)), 
+                resetRound();
             }
             else if(board[0][i] === board[1][i] && board[1][i] === board[2][i]){
-               return board[0][i] === players[0].mark ? players[0].won() : players[1].won(), resetRound(); 
+            return board[0][i] === players[0].mark ? (players[0].won(), congrats(players[0].mark)) : (players[1].won(), congrats(players[1].mark)), 
+               resetRound(); 
             }
         }if((board[1][1] == board[0][0] && board[1][1] == board[2][2]) || 
             (board[1][1] == board[0][2] && board[1][1] == board[2][0])){
-                return board[1][1] === players[1].mark ? players[1].won() : players[0].won(), resetRound();
+            return board[1][1] === players[1].mark ? (players[1].won(), congrats(players[1].mark)) : (players[0].won(), congrats(players[0].mark)), 
+                resetRound();
         }
-        else if(turnCount == 9){return resetRound()}
+        else if(turnCount == 9){return congrats(2), resetRound()}
         else{return {board, turnCount}}
     }
-    return {marking, resetRound, board, players, turns};
-    
-    // let winArchive = [];
-    // winArchive.push(players[0].symbol)
-    // let racha = 3;
-    // if(winArchive[winArchive.length - 1] === winArchive[winArchive.length - 2] && 
-    //     winArchive[winArchive.length - 1] === winArchive[winArchive.length - 3]){
-    //     winArchive[0] === players[0].symbol ? `Congrats ${players[0].name}! ${racha} a row`: `Congrats ${players[1].name}! ${racha} a row`;
-    //     racha++;
-    // }else if(winArchive[winArchive.length - 1] !== winArchive[winArchive.length - 2]){racha = 3;}
-
+    let streak = 2;
+    let winArchive = [];
+    function congrats(winner){
+        winArchive.push(winner);
+        if(winArchive[winArchive.length - 1] === winArchive[winArchive.length - 2] && 
+        winArchive[winArchive.length - 1] === winArchive[winArchive.length - 3]){
+        streak++;
+        return winArchive[winArchive.length - 1] === 2 ? console.log(`All ${streak} rounds are ties!`)  : 
+        winArchive[winArchive.length - 1] === players[0].mark ?
+        console.log(`Congrats ${players[0].name}! ${streak} in  a row`): console.log(`Congrats ${players[1].name}! ${streak} in a row`);
+        }
+        else if(roundCount < 3){return console.log(`Go on`);}
+        else if(winArchive[winArchive.length - 1] !== winArchive[winArchive.length - 2]){streak = 2; console.log(`Streakbreak`);}
+    }
+    let getArchive = () =>  winArchive;
+    let getSteak = () =>  streak;
+    return {marking, resetRound, board, players, turns, getArchive, getSteak};
 }
 const set = setGame(`Ginni`, `Bo`, false);
 const now = newGame(); 

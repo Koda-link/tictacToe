@@ -36,19 +36,14 @@ function setGame(name1, name2, whoMark){
 };
 
 function newGame(){
-
     let board = set.getBoard();
-
     players = set.getPlayers(); 
-
     let turns = set.geTurns();
     const {t1, t2} = turns;
 
     let turnCount = 0;
     let roundCount = 0;
-
     let yourTurn;
-    // const geTount = () => turnCount;
     
     function resetRound(){
     turnCount = 0;
@@ -88,6 +83,7 @@ function newGame(){
         else if(turnCount == 9){return congrats(2), resetRound()}
         else{return {board, turnCount}}
     }
+
     let streak = 2;
     let winArchive = [];
     function congrats(winner){
@@ -106,8 +102,10 @@ function newGame(){
     let getSteak = () =>  streak;
     return {marking, resetRound, board, players, turns, getArchive, getSteak};
 }
-const set = setGame(`Ginni`, `Bo`, false);
-const now = newGame(); 
-// function resetGame(){
+let set = setGame(`Ginni`, `Bo`, false);
+let now = newGame(); 
 
-// }
+function resetGame(){
+    set = setGame(`Jojo`, `Vee`, true);
+    now = newGame(); 
+}

@@ -37,7 +37,7 @@ function setGame(name1, name2, whoMark){
 
 function newGame(){
     let board = set.getBoard();
-    players = set.getPlayers(); 
+    let players = set.getPlayers(); 
     let turns = set.geTurns();
     const {t1, t2} = turns;
 

@@ -10,37 +10,39 @@
 <body>
     <div class="form">
         <button command="show-modal" commandfor="setInfo">Wanna play?</button>
-
         <dialog id="setInfo">
-        <form method="post">
-            <label class="switch" for="whoMark">
-                <input type="checkbox" id="whoMark" name="whoMark">
-                <span class="slider round">
-                    <svg class="x" width="35" height="35">
-                        <line x1="17"y1="5"x2="17"y2="30" stroke="white" stroke-width="4"/>
-                        <line x1="30"y1="17"x2="5"y2="17" stroke="white" stroke-width="4"/>
-                    </svg>  
-                                     
-                    <svg class="xx" width="35" height="35">
-                        <line x1="17"y1="5"x2="17"y2="30" stroke="white" stroke-width="4"/>
-                        <line x1="30"y1="17"x2="5"y2="17" stroke="white" stroke-width="4"/>
-                    </svg>
-                </span>
-            </label>  
+            <form method="post">
+                
+                <label class="switch" for="whoMark">
+                    <input type="checkbox" id="whoMark" name="whoMark">
+                    <span class="slider round">
+                        <svg class="xo" width="35" height="35">
+                            <line x1="17"y1="5"x2="17"y2="30" stroke="white" stroke-width="4"/>
+                            <line x1="30"y1="17"x2="5"y2="17" stroke="white" stroke-width="4"/>
+                        </svg>  
+                                        
+                        <svg class="xoxo" width="35" height="35">
+                            <line x1="17"y1="5"x2="17"y2="30" stroke="white" stroke-width="4"/>
+                            <line x1="30"y1="17"x2="5"y2="17" stroke="white" stroke-width="4"/>
+                        </svg>
+                    </span>
+                </label>  
 
-            <label for="name1">Player #1:</label>
-            <input type="text" id="name1" name="name1" placeholder="Ginni" required>
-            <label for="name2">Player #2:</label>
-            <input type="text" id="name2" name="name2" placeholder="Bo" required> 
-
-            <button type="submit">Let's go!</button>
-        </form>
-        <button  commandfor="setInfo" command="close">Nah.</button>
+                <label for="name1">Player #1:</label>
+                <input type="text" id="name1" name="name1" placeholder="Ginni" maxlength="10" required>
+                <label for="name2">Player #2:</label>
+                <input type="text" id="name2" name="name2" placeholder="Bo" maxlength="10" required> 
+                <button type="button" id="onGame">Let's go!</button>
+            </form>
+            <button  commandfor="setInfo" command="close">Nah.</button>
         </dialog>
     </div>
+
     <h1>Tic-Tac</h1>
     <div class="game">
-        <div class="board"><button>❌</button><button>⭕</button><button>❌</button></div>
+        <div class="uiBoard">
+            <!-- <button>❌</button><button>⭕</button><button>❌</button> -->
+        </div>
     </div>
     <div class="chatbox">
         <dl>

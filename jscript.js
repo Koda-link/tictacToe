@@ -1,3 +1,21 @@
+let onGame = document.getElementById(`onGame`);
+let uiBoard = document.querySelector(`.uiBoard`);
+
+onGame.addEventListener(`click`, trigger);
+let set = setGame();
+let now; 
+function trigger(event){
+    event.preventDefault();
+    console.log(`hoo haa`);    
+    let whoMark = document.getElementById(`whoMark`).checked;
+    let name1 = document.querySelector(`#name1`).value;
+    let name2 = document.querySelector(`#name2`).value;
+
+    set = setGame(name1, name2, whoMark);
+    now = newGame();
+    return {set, now};
+}
+
 function setGame(name1, name2, whoMark){
     let board = [
         [2, 3, 4], 
@@ -18,7 +36,7 @@ function setGame(name1, name2, whoMark){
     players.push(p1);
     players.push(p2);
 
-    whoMark === true ? (players[0].mark = 0, players[1].mark = 1) : (players[0].mark = 1, players[1].mark = 0);
+    whoMark === false ? (players[0].mark = 0, players[1].mark = 1) : (players[0].mark = 1, players[1].mark = 0);
 
     const turns = { t1: 2, t2: 2 };
     const firsTurn = () => {
@@ -43,9 +61,43 @@ function newGame(){
 
     let turnCount = 0;
     let roundCount = 0;
-    let yourTurn;
-    
+    let yourTurn;    
+
+    let cell = [];
+    uiBoard.textContent = '';
+    for(let i = 0 ; i < 9 ; i++){
+        cell[i] = document.createElement(`button`);
+        cell[i].textContent = '';
+        uiBoard.appendChild(cell[i]);
+        cell[i].classList.add(`cells`);
+    };
+    cell.forEach((btn, i) => cell[i].addEventListener(`click`, () => {
+        cell[i].disabled = true;
+        let x;
+        let y;
+        switch(true){
+            case (i >= 0 && i <= 2):x = 0
+            break;
+            case (i >= 3 && i <= 5):x = 1
+            break;
+            case (i >= 6 && i <= 8):x = 2
+            break;
+        }switch(true){
+            case (i == 0 ||i == 3 ||i == 6):y = 0
+            break;
+            case (i == 1 ||i == 4 ||i == 7):y = 1
+            break;
+            case (i == 2 ||i == 5 ||i == 8):y = 2
+            break;
+        }return marking(x, y, i);
+    }));
+
     function resetRound(){
+    cell.forEach((btn, i) => {
+        cell[i].classList.remove(`o`);
+        cell[i].classList.remove(`x`);
+        cell[i].disabled = false;
+    });
     turnCount = 0;
     board = [
         [2, 3, 4], 
@@ -56,14 +108,15 @@ function newGame(){
     return roundCount;
     };
 
-    function marking(x, y){
+    function marking(x, y, i){
         turnCount += 1;
         turnCount % 2 === 0 ? yourTurn = t2 : yourTurn = t1;
         board[x].splice(y, 1, yourTurn);
+        board[x][y] === 0 ?  cell[i].classList.add(`o`) : cell[i].classList.add(`x`);
         if(turnCount >= 5){return check()};
         return {board, turnCount};
     };
-    
+
     function check(){
         console.log(`checking`);
         for(let i = 0 ; i < 2; i++){
@@ -101,11 +154,4 @@ function newGame(){
     let getArchive = () =>  winArchive;
     let getSteak = () =>  streak;
     return {marking, resetRound, board, players, turns, getArchive, getSteak};
-}
-let set = setGame(`Ginni`, `Bo`, false);
-let now = newGame(); 
-
-function resetGame(){
-    set = setGame(`Jojo`, `Vee`, true);
-    now = newGame(); 
-}
+};

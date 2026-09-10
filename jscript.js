@@ -1,9 +1,8 @@
 let onGame = document.getElementById(`onGame`);
-let uiBoard = document.querySelector(`.uiBoard`);
-
-onGame.addEventListener(`click`, trigger);
 let set = setGame();
 let now; 
+
+onGame.addEventListener(`click`, trigger);
 function trigger(event){
     event.preventDefault();
     console.log(`hoo haa`);    
@@ -14,7 +13,7 @@ function trigger(event){
     set = setGame(name1, name2, whoMark);
     now = newGame();
     return {set, now};
-}
+};
 
 function setGame(name1, name2, whoMark){
     let board = [
@@ -45,12 +44,10 @@ function setGame(name1, name2, whoMark){
     };
     firsTurn();
 
-    const message = `${players[0].name} >> ${players[0].mark}  && ${players[1].name} >> ${players[1].mark}`;
-
     const geTurns = () => turns;
     const getBoard = () => board;
     const getPlayers = () => players;
-    return {message, getBoard, geTurns, getPlayers};
+    return {getBoard, geTurns, getPlayers};
 };
 
 function newGame(){
@@ -63,6 +60,27 @@ function newGame(){
     let roundCount = 0;
     let yourTurn;    
 
+    let uiLog = document.getElementById(`uiLog`);
+    uiLog.textContent = '';
+    let logs = [];
+    logs[0] = document.createElement(`h2`);
+    logs[0].textContent = `Referee says: `;
+    uiLog.appendChild(logs[0]);
+    logs[1] = document.createElement(`dt`);
+    let turnLog = ``; let symLog = ``;
+    t1 == 0 ? turnLog = `🛟 goes first then ⚓, ` : turnLog = `⚓ goes first then 🛟, ` ;
+    players[0].mark == 0 ? symLog = `${players[0].name} is 🛟 & ${players[1].name} is ⚓` : symLog = `${players[0].name} is ⚓ & ${players[1].name} is 🛟`;
+    logs[1].textContent = turnLog + symLog;
+    uiLog.appendChild(logs[1]);
+
+    function refLogs(message){
+        let i = logs.length;
+        logs[i] = document.createElement(`dd`);
+        logs[i].textContent = message;
+        uiLog.appendChild(logs[i]);
+    };
+
+    let uiBoard = document.querySelector(`.uiBoard`);
     let cell = [];
     uiBoard.textContent = '';
     for(let i = 0 ; i < 9 ; i++){
@@ -73,8 +91,7 @@ function newGame(){
     };
     cell.forEach((btn, i) => cell[i].addEventListener(`click`, () => {
         cell[i].disabled = true;
-        let x;
-        let y;
+        let x; let y;
         switch(true){
             case (i >= 0 && i <= 2):x = 0
             break;
@@ -105,6 +122,7 @@ function newGame(){
         [8, 9, 2]
     ];
     roundCount++;
+    refLogs(`New round!`);
     return roundCount;
     };
 
@@ -119,21 +137,24 @@ function newGame(){
 
     function check(){
         console.log(`checking`);
-        for(let i = 0 ; i < 2; i++){
+        for(let i = 0 ; i < 3; i++){
             if(board[i].every((e) => e === board[i][1])){
-            return board[i][0] === players[0].mark ? (players[0].won(), congrats(players[0].mark)) : (players[1].won(), congrats(players[1].mark)), 
-                resetRound();
+            return board[i][0] === players[0].mark ? (players[0].won(), refLogs(`${players[0].name} won!`), congrats(players[0].mark)) : 
+                        (players[1].won(), refLogs(`${players[1].name} won!`), congrats(players[1].mark)), 
+            resetRound();
             }
             else if(board[0][i] === board[1][i] && board[1][i] === board[2][i]){
-            return board[0][i] === players[0].mark ? (players[0].won(), congrats(players[0].mark)) : (players[1].won(), congrats(players[1].mark)), 
-               resetRound(); 
+            return board[0][i] === players[0].mark ? (players[0].won(), refLogs(`${players[0].name} won!`), congrats(players[0].mark)) : 
+                        (players[1].won(), refLogs(`${players[1].name} won!`), congrats(players[1].mark)), 
+            resetRound(); 
             }
         }if((board[1][1] == board[0][0] && board[1][1] == board[2][2]) || 
             (board[1][1] == board[0][2] && board[1][1] == board[2][0])){
-            return board[1][1] === players[1].mark ? (players[1].won(), congrats(players[1].mark)) : (players[0].won(), congrats(players[0].mark)), 
-                resetRound();
+            return board[1][1] === players[1].mark ? (players[1].won(), refLogs(`${players[1].name} won!`), congrats(players[1].mark)) : 
+                        (players[0].won(), refLogs(`${players[0].name} won!`), congrats(players[0].mark)), 
+            resetRound();
         }
-        else if(turnCount == 9){return congrats(2), resetRound()}
+        else if(turnCount == 9){return congrats(2), refLogs(`It's a tie.`), resetRound()}
         else{return {board, turnCount}}
     }
 
@@ -141,15 +162,16 @@ function newGame(){
     let winArchive = [];
     function congrats(winner){
         winArchive.push(winner);
+
         if(winArchive[winArchive.length - 1] === winArchive[winArchive.length - 2] && 
         winArchive[winArchive.length - 1] === winArchive[winArchive.length - 3]){
         streak++;
-        return winArchive[winArchive.length - 1] === 2 ? console.log(`All ${streak} rounds are ties!`)  : 
+        return winArchive[winArchive.length - 1] === 2 ? refLogs(`All ${streak} rounds are ties!`)  : 
         winArchive[winArchive.length - 1] === players[0].mark ?
-        console.log(`Congrats ${players[0].name}! ${streak} in  a row`): console.log(`Congrats ${players[1].name}! ${streak} in a row`);
+        refLogs(`Congrats ${players[0].name}! ${streak} in  a row`): refLogs(`Congrats ${players[1].name}! ${streak} in a row`);
         }
-        else if(roundCount < 3){return console.log(`Go on`);}
-        else if(winArchive[winArchive.length - 1] !== winArchive[winArchive.length - 2]){streak = 2; console.log(`Streakbreak`);}
+        else if(roundCount < 3){return refLogs(`Go on`);}
+        else if(winArchive[winArchive.length - 1] !== winArchive[winArchive.length - 2]){streak = 2; refLogs(`Streakbreak`);}
     }
     let getArchive = () =>  winArchive;
     let getSteak = () =>  streak;

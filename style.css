@@ -4,29 +4,47 @@
 *:not(dialog) {
   margin: 0;
 }
-
 body {
   line-height: 1.5;
   display: grid;
-  grid-template: 1fr 9fr / 1fr 2fr 1fr;
+  grid-template: 1fr 9fr / 3fr 6fr 4fr;
+  background-color: burlywood;
 }
 body div{
   height: 100vh;
 }
 
-.form{
-  display: flex;
-  flex-flow: row nowrap;
+.gameForm{
   grid-row: 1 / 3;
+  display: grid;
+  grid-template-columns: 1fr 1fr;
   align-items: start;
-  justify-content: end;
 }
-.form button{
-  margin: 15% 5%;
+.gameForm button{
+  font-family: 'Lucida Sans', 'Lucida Sans Regular', 'Lucida Grande', 'Lucida Sans Unicode', Verdana, sans-serif;
+  background-color: rebeccapurple;
+  font-size: 1.1rem;
+  padding: 4% 6%;
+  border: solid 2px;
+  border-radius: 11px;
+  color: honeydew;
+}
+.gameForm button:hover{
+  color: rebeccapurple;
+  background-color: honeydew;
+}
+#reset{
+  margin: 28% 12%;
+}
+#noGame{
+  margin: 16%;
+  display: inline-grid;
+  justify-items: right;
 }
 dialog{
   margin: 6% 5%;
-  border: 6px dashed red;
+  border: 6px dashed navy;
+  background-color: aliceblue;
   bottom: auto;
   right: auto;
   width: 20%;
@@ -35,16 +53,27 @@ dialog{
 form{
   height: 72%;
   display: grid;
+  font-size: 1.1rem;
   grid-template: 2fr 2fr 2fr 2fr 1fr / 1fr 3fr;
   padding: 5%;
 }
 form button{
   grid-column: 1 / 3;
+  margin: 10% 5%;
 }
+
 
 h1{
   grid-column: 2 / 4;
+  color: ivory;
   text-align: center;
+  font-family: 'Franklin Gothic Medium', 'Arial Narrow', Arial, sans-serif;
+  font-size: 2.3rem;
+  padding-top: 18px;
+}
+h2{
+  font-family: 'Courier New', Courier, monospace;
+  color: brown;
 }
 
 .game{
@@ -55,7 +84,7 @@ h1{
 .uiBoard{
   width: 100%;
   height: 80%;  
-  background-color: blanchedalmond;
+  background-color: lavenderblush;
   display: grid;
   grid-template: 1fr 1fr 1fr / 1fr 1fr 1fr;
 }
@@ -66,15 +95,29 @@ h1{
   grid-row: 2;
 }
 dl{
-  border: 6px dashed red;
+  border: 6px dashed crimson;
+  background-color: blanchedalmond;
+  overflow: scroll;
+  padding: 5%;
   width: 66%;
   height: 80%;
 }
-input, button {
-  font: inherit;
+dt{
+  font-weight: bolder;
+  font-size: 1.1rem;
+  font-family: 'Courier New', Courier, monospace;
+}
+dd{
+  font-family: monospace;
+  font-size: 1rem;
+}
+input {
+  font-family: 'Lucida Grande', 'Lucida Sans Unicode', Geneva, Verdana, sans-serif;
+  width: 85%;
 }
 label{
   align-self: flex-end;
+  font-family: monospace;
 }
 
 
@@ -139,17 +182,21 @@ input:checked + .slider:before {
 
 .cells{
   background-color: lavender;
+  border: groove snow;
   font-size: 4.8rem;
 }
+.cells:hover{
+  background-color: darkorchid;
+}
 .x{
-  background-color: firebrick;
+  background-color: rgb(196, 56, 56);
+  border: double 7px mistyrose;
 }
 .o{
-  background-color: #2196F3;
+  background-color: rgb(26, 152, 174);
+  border: double 7px mintcream;
 }
-.x::before {
-  content: "⚓";
-}
-.o::before {
-  content: "🛟";
-}
+.x:hover{background-color: firebrick;}
+.o:hover{background-color: teal;}
+.x::before {content: "⚓";}
+.o::before {content: "🛟";}

@@ -8,8 +8,8 @@
     <title>TIC! TAC!! TOE!!</title>
 </head>
 <body>
-    <div class="form">
-        <button command="show-modal" commandfor="setInfo">Wanna play?</button>
+    <div class="gameForm"><span id="noGame"></span>
+        <button command="show-modal" commandfor="setInfo" id="reset">Wanna play?</button>
         <dialog id="setInfo">
             <form method="post">
                 
@@ -37,19 +37,15 @@
             <button  commandfor="setInfo" command="close">Nah.</button>
         </dialog>
     </div>
-
-    <h1>Tic-Tac</h1>
+    <h1>Tic-Tac ⏱️ Toe</h1>
     <div class="game">
         <div class="uiBoard">
-            <!-- <button>❌</button><button>⭕</button><button>❌</button> -->
         </div>
     </div>
     <div class="chatbox">
         <dl id="uiLog">
-            <dt><h2>Referee says;</h2></dt>
         </dl>
     </div>
-
     <script src="jscript.js"></script>
 </body>
 </html>

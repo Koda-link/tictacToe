@@ -9,7 +9,9 @@ function trigger(event){
     let whoMark = document.getElementById(`whoMark`).checked;
     let name1 = document.querySelector(`#name1`).value;
     let name2 = document.querySelector(`#name2`).value;
-
+    if(name1 === `` || name2 === ``){
+        return window.alert(`Please fill both names`);
+    };
     set = setGame(name1, name2, whoMark);
     now = newGame();
     return {set, now};
@@ -34,7 +36,6 @@ function setGame(name1, name2, whoMark){
     const p2 = newPlayer(`${name2}`);
     players.push(p1);
     players.push(p2);
-
     whoMark === false ? (players[0].mark = 0, players[1].mark = 1) : (players[0].mark = 1, players[1].mark = 0);
 
     const turns = { t1: 2, t2: 2 };
@@ -43,7 +44,6 @@ function setGame(name1, name2, whoMark){
         (turns.t1 = players[0].mark, turns.t2 = players[1].mark) : (turns.t2 = players[0].mark, turns.t1 = players[1].mark);
     };
     firsTurn();
-
     const geTurns = () => turns;
     const getBoard = () => board;
     const getPlayers = () => players;
@@ -51,6 +51,8 @@ function setGame(name1, name2, whoMark){
 };
 
 function newGame(){
+    const reset = document.getElementById(`reset`);
+    reset.textContent = `ReStart?`;
     let board = set.getBoard();
     let players = set.getPlayers(); 
     let turns = set.geTurns();
@@ -78,6 +80,7 @@ function newGame(){
         logs[i] = document.createElement(`dd`);
         logs[i].textContent = message;
         uiLog.appendChild(logs[i]);
+        uiLog.scrollTop = uiLog.scrollHeight;
     };
 
     let uiBoard = document.querySelector(`.uiBoard`);
@@ -122,8 +125,7 @@ function newGame(){
         [8, 9, 2]
     ];
     roundCount++;
-    refLogs(`New round!`);
-    return roundCount;
+    refLogs(`New round`);
     };
 
     function marking(x, y, i){
@@ -132,7 +134,6 @@ function newGame(){
         board[x].splice(y, 1, yourTurn);
         board[x][y] === 0 ?  cell[i].classList.add(`o`) : cell[i].classList.add(`x`);
         if(turnCount >= 5){return check()};
-        return {board, turnCount};
     };
 
     function check(){
@@ -155,14 +156,12 @@ function newGame(){
             resetRound();
         }
         else if(turnCount == 9){return congrats(2), refLogs(`It's a tie.`), resetRound()}
-        else{return {board, turnCount}}
-    }
+    };
 
     let streak = 2;
     let winArchive = [];
     function congrats(winner){
         winArchive.push(winner);
-
         if(winArchive[winArchive.length - 1] === winArchive[winArchive.length - 2] && 
         winArchive[winArchive.length - 1] === winArchive[winArchive.length - 3]){
         streak++;
@@ -170,10 +169,20 @@ function newGame(){
         winArchive[winArchive.length - 1] === players[0].mark ?
         refLogs(`Congrats ${players[0].name}! ${streak} in  a row`): refLogs(`Congrats ${players[1].name}! ${streak} in a row`);
         }
-        else if(roundCount < 3){return refLogs(`Go on`);}
-        else if(winArchive[winArchive.length - 1] !== winArchive[winArchive.length - 2]){streak = 2; refLogs(`Streakbreak`);}
-    }
-    let getArchive = () =>  winArchive;
-    let getSteak = () =>  streak;
-    return {marking, resetRound, board, players, turns, getArchive, getSteak};
+        else if(streak >= 3 && winArchive[winArchive.length - 1] !== winArchive[winArchive.length - 2]){streak = 2; refLogs(`Streakbreak`);}        
+        else if(roundCount < 3 || winArchive[winArchive.length - 1] !== winArchive[winArchive.length - 2]){return refLogs(`Go on...`);}
+    };
+    
+    let noGame = document.querySelector(`#noGame`);
+    const end = document.createElement(`button`);
+    end.textContent = `-End-`;
+    noGame.textContent = ``;
+    noGame.appendChild(end);
+    end.addEventListener(`click`, ()=>{
+        uiBoard.textContent = '';
+        end.disabled = true;
+        refLogs(`${players[0].name}: ${players[0].getWin()} against ${players[1].name}: ${players[1].getWin()}`);
+        players[0].getWin() === players[1].getWin() ? refLogs(`It was an overall draw.`) : players[0].getWin() > players[1].getWin() ? 
+        refLogs(`${players[0].name} is the winner!`) : refLogs(`${players[1].name} is the winner!`);
+    });
 };
